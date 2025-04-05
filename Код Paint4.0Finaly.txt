@@ -1,0 +1,205 @@
+
+import turtle
+from turtle import RawTurtle, TurtleScreen
+import tkinter.messagebox
+from tkinter import colorchooser, filedialog, Menu
+import pyautogui
+
+
+### ### -- добавка Tkinter -- ### ###
+
+DEFAULT_COLOR = (0, 0, 0)
+## ## Ползунок толщины пера начало
+
+# Глобальные переменные
+pen_size = 1
+current_color = DEFAULT_COLOR
+
+# Глобальные переменные
+
+
+def change_pen_size(value):
+    global pen_size, draw
+    try:
+        pen_size = int(value)
+        if draw:  # Убедитесь, что черепашка существует
+            draw.width(pen_size)  # Обновляем толщину пера
+    except ValueError:
+        pen_size = 1
+        print("Произошла какая-то ошибка из-за чего толщина пера снова ровна 1.")
+    #print(f"Толщина пера изменена на: {pen_size}") # убрать или зарешётить
+
+## ## Ползунок толщины пера конец
+
+
+def pen_washing():
+    draw.pencolor('white')
+def pen_red():
+    draw.pencolor("red")
+def pen_black():
+    draw.pencolor('black')
+def pen_green():
+    draw.pencolor('green')
+def pen_gray():
+    draw.pencolor('gray')
+def pen_yellow():
+    draw.pencolor('yellow')
+def pen_turquoise():
+    draw.pencolor('turquoise')
+def pen_blue():
+    draw.pencolor('blue')
+def pen_dark_red():
+    draw.pencolor('dark red')
+def pen_orange():
+    draw.pencolor('orange')
+def pen_purple():
+    draw.pencolor('purple')
+def draw_up():
+    draw.penup()
+def draw_down():
+    draw.pendown()
+def choose_color():
+  """Открывает окно выбора цвета и устанавливает цвет черепахи."""
+  color = colorchooser.askcolor(title="Выберите цвет")
+  if color:  # Убедимся, что пользователь выбрал цвет
+    new_color = color[1]  # color[1] содержит цвет в шестнадцатеричном формате (#RRGGBB)
+    draw.color(new_color)
+
+def choose_fill_color():
+  """Открывает окно выбора цвета заливки."""
+  color = colorchooser.askcolor(title="Выберите цвет заливки")
+  if color:
+    global fill_color  # Объявляем fill_color как глобальную переменную
+    fill_color = color[1]  # Шестнадцатеричный код цвета
+
+def fill_screen():
+    """Заполняет весь экран текущим цветом."""
+
+    pen.fillcolor(fill_color)
+
+    pen.penup()
+    pen.goto(-screen.window_width()/2, screen.window_height()/2-50) # верхний левый угол
+    pen.pendown()
+    pen.speed(0) # Максимальная скорость
+
+    pen.begin_fill()
+    for _ in range(2):
+        pen.forward(screen.window_width())
+        pen.right(90)
+        pen.forward(screen.window_height())
+        pen.right(90)
+    pen.end_fill()
+
+def save_screen():
+    """Сохраняет содержимое холста Turtle в PNG-файл, используя pyautogui."""
+    filename = filedialog.asksaveasfilename(defaultextension=".png",
+                                            filetypes=[("PNG files", "*.png"), ("All files", "*.*")],
+                                            title="Сохранить изображение Turtle (pyautogui)")
+
+    if filename:
+        # Получаем координаты канваса
+        x = window.winfo_rootx() + canvas.winfo_x()
+        y = window.winfo_rooty() + canvas.winfo_y()
+        width = canvas.winfo_width()
+        height = canvas.winfo_height()
+
+        try:
+            screenshot = pyautogui.screenshot(region=(x, y, width, height))
+            screenshot.save(filename)
+            print(f"Сохранено как {filename}")
+        except Exception as e:
+            print(f"Ошибка сохранения pyautogui: {e}")
+
+width = 1
+window = tkinter.Tk()
+
+canvas = tkinter.Canvas(window, width=1920, height=1080, bg="white")
+canvas.pack()
+window.geometry("800x600")
+window.title('Paint')
+draw = turtle.RawTurtle(canvas)
+pen = turtle.RawTurtle(canvas)
+pen.hideturtle()
+
+color_button = tkinter.Button(window, command=choose_color,text='➕',bg='orange', fg='green', width=5,height=2)
+color_button.place(x=690+55, y=0)
+
+btnP = tkinter.Button(window,command=pen_purple,bg='purple',fg='white',width=5,height=2)#bg=фон,fg=передний план
+btnP.place(x=640+50,y=0)
+
+btnB = tkinter.Button(window,command=pen_blue,bg='blue',fg='white',width=5,height=2)
+btnB.place(x=590+45,y=0)
+
+btnTur = tkinter.Button(window,command=pen_turquoise,bg='turquoise',fg='white',width=5,height=2)
+btnTur.place(x=540+40,y=0)
+
+btnG = tkinter.Button(window,command=pen_green,bg='green',fg='white',width=5, height=2)
+btnG.place(x=490+35,y=0)
+
+btnY = tkinter.Button(window,command=pen_yellow,bg='yellow',fg='white',width=5,height=2)
+btnY.place(x=440+30,y=0)
+
+btnO = tkinter.Button(window,command=pen_orange,bg='orange',fg='white',width=5,height=2)
+btnO.place(x=390+25,y=0)
+
+btnR = tkinter.Button(window,command=pen_red,bg='red', fg='white', width=5, height=2)
+btnR.place(x=340+20, y=0)
+
+btnDR = tkinter.Button(window, command=pen_dark_red,bg='dark red',fg='white',width=5,height=2)
+btnDR.place(x=290+15,y=0)
+
+btnGr = tkinter.Button(window,command=pen_gray,bg='gray',fg='white',width=5,height=2)
+btnGr.place(x=240+10,y=0)
+
+btnB = tkinter.Button(window,command=pen_black,bg='black', fg='white', width=5, height=2)
+btnB.place(x=190+5, y=0)
+
+color_button = tkinter.Button(window, text="➕📦💧", command=choose_fill_color,bg='white', fg='black', width=7, height=1)
+color_button.place(x=44, y=33)
+
+# Кнопка для заливки
+fill_button = tkinter.Button(window, text="📦💧", command=fill_screen,bg='white', fg='black', width=4, height=1)
+fill_button.place(x=68,y=0)
+
+btnWashing_gum = tkinter.Button(window, text='✏️',command=pen_washing, bg='white', fg='black', width=2, height=1)
+btnWashing_gum.place(x=45,y=0)
+
+btnUp = tkinter.Button(window, text='⬆️',command=draw_up,bg='white',fg='black',width=2,height=1)
+btnUp.place(x=110,y=0)
+
+btnDown = tkinter.Button(window,text='⬇️',command=draw_down,bg='white',fg='black',width=2,height=1)
+btnDown.place(x=110,y=35)
+
+# Turtle Screen and RawTurtle (создаем сразу)
+screen = TurtleScreen(canvas)
+draw = RawTurtle(screen)
+
+#draw.hideturtle()  # Скрываем черепашку
+
+# Scale для толщины пера
+pen_size_scale = tkinter.Scale(window, from_=1, to=100, orient=tkinter.VERTICAL, command=change_pen_size)
+pen_size_scale.set(pen_size)
+pen_size_scale.place(x=0, y=200)
+
+menu = Menu(window)
+save_like = Menu(menu)
+save_like.add_command(label='💾  Сохранить как       ', command=save_screen)
+menu.add_cascade(label='Файл', menu=save_like)
+window.config(menu=menu)
+
+draw.width(1)
+def drag(i, j):
+    draw.ondrag(None)
+    draw.setheading(draw.towards(i, j))
+    draw.goto(i, j)
+    draw.ondrag(drag)
+draw.speed('fastest')
+draw.shape("turtle")
+draw.ondrag(drag)
+
+### ### -- конец добавки -- ### ###
+draw.penup()
+draw.goto(400,-50)
+draw.pendown()
+
+window.mainloop()
